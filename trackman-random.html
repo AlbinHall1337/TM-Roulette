@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trackman x Bilvision <br/> Roulette </title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; text-align: center; padding: 20px; background-color: #0b0c10; color: #c5c6c7; }
+        .container { background: #1f2833; padding: 30px; border-radius: 20px; max-width: 800px; margin: 0 auto; border: 1px solid #45a29e; box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
+        h1 { color: #66fcf1; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 5px; }
+        .subtitle { font-size: 12px; color: #45a29e; margin-bottom: 25px; }
+        
+        .filters { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+        .filter-group { display: flex; flex-direction: column; align-items: flex-start; }
+        label { font-size: 10px; font-weight: bold; color: #45a29e; margin-bottom: 4px; text-transform: uppercase; }
+        select { background: #0b0c10; color: #66fcf1; border: 1px solid #45a29e; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+
+        #display-box { height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #0b0c10; border-radius: 15px; border: 2px solid #1f2833; margin-bottom: 25px; transition: 0.3s; }
+        .c-name { font-size: 2.8rem; font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 10px; text-shadow: 0 0 10px rgba(102, 252, 241, 0.3); }
+        .c-meta { color: #66fcf1; font-size: 14px; font-weight: bold; letter-spacing: 1px; }
+        .stars { color: #ffcc00; font-size: 24px; margin-top: 10px; }
+
+        button { width: 100%; max-width: 400px; background: #66fcf1; color: #0b0c10; border: none; padding: 20px; border-radius: 10px; font-size: 20px; font-weight: 900; cursor: pointer; transition: 0.2s; box-shadow: 0 5px 15px rgba(102, 252, 241, 0.2); }
+        button:hover { background: #45a29e; transform: scale(1.02); }
+        .stats { font-size: 11px; color: #45a29e; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Trackman x Bilvision</h1>
+    <div class="subtitle">83-COURSEs</div>
+    
+    <div class="filters">
+        <div class="filter-group">
+            <label>Origin</label>
+            <select id="originF">
+                <option value="all">All Courses</option>
+                <option value="real">Real Venues</option>
+                <option value="fic">Fictional</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Par Filter</label>
+            <select id="parF">
+                <option value="all">Any Par</option>
+                <option value="std">Standard (70+)</option>
+                <option value="p3">Par 3 Courses</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Difficulty</label>
+            <select id="diffF">
+                <option value="all">Any Difficulty</option>
+                <option value="easy">1-2 (Beginner)</option>
+                <option value="med">3 (Intermediate)</option>
+                <option value="hard">4-5 (Tour Pro)</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="display-box">
+        <div class="c-name" id="cName">CHOOSE COURSE</div>
+        <div class="c-meta" id="cMeta">READY FOR TEE OFF</div>
+        <div class="stars" id="cStars"></div>
+    </div>
+
+    <button onclick="spin()">SPIN THE WHEEL</button>
+    <div class="stats" id="totalLib">Loading library...</div>
+</div>
+
+<script>
+const courses = [
+    { n: "Adare Manor", t: "real", p: 72, d: 4 },
+    { n: "Albany GC", t: "real", p: 72, d: 4 },
+    { n: "Aronimink GC", t: "real", p: 70, d: 4 },
+    { n: "Bandon Dunes", t: "real", p: 72, d: 3 },
+    { n: "Bandon Preserve", t: "real", p: 39, d: 2 },
+    { n: "Barnbougle Dunes", t: "real", p: 71, d: 4 },
+    { n: "Barnbougle Lost Farm", t: "real", p: 71, d: 4 },
+    { n: "Barsebäck GC", t: "real", p: 73, d: 4 },
+    { n: "Bay Harbor (Links/Quarry)", t: "real", p: 72, d: 3 },
+    { n: "Bear Dance", t: "real", p: 72, d: 3 },
+    { n: "Bellerive CC", t: "real", p: 71, d: 4 },
+    { n: "Bethpage Black", t: "real", p: 71, d: 5 },
+    { n: "Black Desert Resort", t: "real", p: 72, d: 4 },
+    { n: "Bonnie Doon", t: "real", p: 71, d: 3 },
+    { n: "Cabot Cliffs", t: "real", p: 72, d: 4 },
+    { n: "Cabot Citrus (Karoo)", t: "real", p: 72, d: 4 },
+    { n: "Cabot Citrus (Wedge)", t: "real", p: 33, d: 2 },
+    { n: "Casa de Campo (Dog)", t: "real", p: 72, d: 4 },
+    { n: "Chileno Bay", t: "real", p: 72, d: 3 },
+    { n: "Chapultepec", t: "real", p: 71, d: 4 },
+    { n: "Conway Farms", t: "real", p: 71, d: 4 },
+    { n: "Craig Ranch", t: "real", p: 72, d: 4 },
+    { n: "Crans-sur-Sierre", t: "real", p: 70, d: 4 },
+    { n: "Crystal Pines", t: "fic", p: 72, d: 3 },
+    { n: "Dalebrook Forest", t: "fic", p: 27, d: 1 },
+    { n: "Devil's Island", t: "fic", p: 72, d: 4 },
+    { n: "Emirates GC", t: "real", p: 72, d: 4 },
+    { n: "Evian Resort", t: "real", p: 71, d: 3 },
+    { n: "Firestone CC", t: "real", p: 70, d: 5 },
+    { n: "Glen Abbey", t: "real", p: 72, d: 3 },
+    { n: "Glen Oaks", t: "real", p: 71, d: 4 },
+    { n: "Great Northern", t: "real", p: 72, d: 5 },
+    { n: "Hillside GC", t: "real", p: 72, d: 4 },
+    { n: "Hualalai Resort", t: "real", p: 72, d: 2 },
+    { n: "Hudson National", t: "real", p: 70, d: 5 },
+    { n: "Innisbrook Copperhead", t: "real", p: 71, d: 5 },
+    { n: "Interlachen CC", t: "real", p: 72, d: 4 },
+    { n: "Lahinch GC", t: "real", p: 71, d: 4 },
+    { n: "Le Golf National", t: "real", p: 71, d: 4 },
+    { n: "Liberty National", t: "real", p: 72, d: 4 },
+    { n: "Lofoten Links", t: "real", p: 71, d: 3 },
+    { n: "London Gardens", t: "fic", p: 27, d: 1 },
+    { n: "Marcella Club", t: "real", p: 72, d: 2 },
+    { n: "Medinah CC", t: "real", p: 72, d: 4 },
+    { n: "Miacomet Golf", t: "real", p: 70, d: 3 },
+    { n: "Miklagard Golf", t: "real", p: 72, d: 4 },
+    { n: "Mission Hills CC", t: "real", p: 72, d: 3 },
+    { n: "Montecito Club", t: "real", p: 71, d: 3 },
+    { n: "Muirfield Village", t: "real", p: 72, d: 5 },
+    { n: "Olympic Course (Rio)", t: "real", p: 71, d: 3 },
+    { n: "Pebble Beach", t: "real", p: 72, d: 3 },
+    { n: "PGA National", t: "real", p: 72, d: 5 },
+    { n: "PGA West (Stadium)", t: "real", p: 72, d: 5 },
+    { n: "Pinehurst No. 2", t: "real", p: 70, d: 5 },
+    { n: "Pinehurst (Cradle)", t: "real", p: 27, d: 2 },
+    { n: "Quail Hollow", t: "real", p: 71, d: 5 },
+    { n: "Valderrama", t: "real", p: 71, d: 5 },
+    { n: "Ridgewood CC", t: "real", p: 71, d: 4 },
+    { n: "Royal Birkdale", t: "real", p: 70, d: 4 },
+    { n: "Royal County Down", t: "real", p: 71, d: 5 },
+    { n: "Royal Melbourne", t: "real", p: 72, d: 5 },
+    { n: "Royal Portrush", t: "real", p: 71, d: 5 },
+    { n: "Royal St George’s", t: "real", p: 70, d: 5 },
+    { n: "Royal Troon", t: "real", p: 71, d: 5 },
+    { n: "Sea Island (Seaside)", t: "real", p: 70, d: 4 },
+    { n: "Sebonack", t: "real", p: 72, d: 4 },
+    { n: "Senoja Valley", t: "fic", p: 27, d: 1 },
+    { n: "Shadowlands", t: "fic", p: 72, d: 4 },
+    { n: "Silverleaf Club", t: "real", p: 72, d: 3 },
+    { n: "Spyglass Hill", t: "real", p: 72, d: 4 },
+    { n: "St Andrews (Old)", t: "real", p: 72, d: 1 },
+    { n: "St Andrews (Castle)", t: "real", p: 71, d: 4 },
+    { n: "St Andrews (New)", t: "real", p: 71, d: 3 },
+    { n: "St Andrews (Jubilee)", t: "real", p: 72, d: 3 },
+    { n: "Sutton Bay", t: "real", p: 72, d: 4 },
+    { n: "Sweetens Cove", t: "real", p: 36, d: 3 },
+    { n: "Taiheiyo Club", t: "real", p: 72, d: 5 },
+    { n: "The Concession", t: "real", p: 72, d: 5 },
+    { n: "The Grove", t: "real", p: 72, d: 3 },
+    { n: "Tokyo Gardens", t: "fic", p: 27, d: 1 },
+    { n: "Trump Turnberry", t: "real", p: 71, d: 4 },
+    { n: "Valhalla GC", t: "real", p: 72, d: 4 },
+    { n: "Wentworth (West)", t: "real", p: 72, d: 4 }
+];
+
+function spin() {
+    const origin = document.getElementById('originF').value;
+    const par = document.getElementById('parF').value;
+    const diff = document.getElementById('diffF').value;
+
+    let pool = courses.filter(c => {
+        const originMatch = (origin === 'all' || c.t === origin);
+        const parMatch = (par === 'all') ? true : (par === 'p3') ? c.p < 60 : c.p >= 70;
+        let diffMatch = true;
+        if(diff === 'easy') diffMatch = c.d <= 2;
+        if(diff === 'med') diffMatch = c.d === 3;
+        if(diff === 'hard') diffMatch = c.d >= 4;
+        return originMatch && parMatch && diffMatch;
+    });
+
+    if (pool.length === 0) {
+        alert("No courses match those exact settings. Try broadening your search!");
+        return;
+    }
+
+    let i = 0;
+    const interval = setInterval(() => {
+        const rand = pool[Math.floor(Math.random() * pool.length)];
+        document.getElementById('cName').innerText = rand.n;
+        i++;
+        if (i > 20) {
+            clearInterval(interval);
+            const final = pool[Math.floor(Math.random() * pool.length)];
+            render(final);
+        }
+    }, 50);
+}
+
+function render(c) {
+    document.getElementById('cName').innerText = c.n;
+    document.getElementById('cMeta').innerText = `PAR ${c.p} | ${c.t.toUpperCase()} | VG3 ELITE`;
+    let s = "";
+    for(let x=0; x<5; x++) s += (x < c.d) ? "★" : "☆";
+    document.getElementById('cStars').innerText = s;
+}
+
+document.getElementById('totalLib').innerText = `Sync complete. ${courses.length} VG3 Elite courses loaded.`;
+</script>
+
+</body>
+</html>
