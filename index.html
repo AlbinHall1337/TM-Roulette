@@ -27,7 +27,7 @@
 
 <div class="container">
     <h1>Trackman X BV-Svingen</h1>
-    <div class="subtitle" id="courseCount">LOADING COURSES...</div>
+    <div class="subtitle" id="courseCount">83-COURSES</div>
     
     <div class="filters">
         <div class="filter-group">
@@ -43,7 +43,7 @@
             <select id="parF">
                 <option value="all">Any Par</option>
                 <option value="std">Standard (70+)</option>
-                <option value="p3">Par 3 Courses</option>
+                <option value="p3">Par 3 / Short</option>
             </select>
         </div>
         <div class="filter-group">
@@ -64,10 +64,11 @@
     </div>
 
     <button onclick="spin()">SPIN THE WHEEL</button>
-    <div class="stats" id="totalLib">Syncing course library...</div>
+    <div class="stats" id="totalLib">Loading verified library...</div>
 </div>
 
 <script>
+// Complete list of 83 courses extracted and verified from Trackman VG3 library
 const courses = [
     { n: "Adare Manor", t: "real", p: 72, d: 4 },
     { n: "Albany GC", t: "real", p: 72, d: 4 },
@@ -84,7 +85,9 @@ const courses = [
     { n: "Black Desert Resort", t: "real", p: 72, d: 4 },
     { n: "Bonnie Doon", t: "real", p: 71, d: 3 },
     { n: "Cabot Cliffs", t: "real", p: 72, d: 4 },
-    { n: "Cabot Citrus (Karoo)", t: "real", p: 72, d: 4 },
+    { n: "Cabot Citrus (Karoo)", t: "real", p: 72, d: 3 },
+    { n: "Cabot Citrus (Roost)", t: "real", p: 72, d: 3 },
+    { n: "Cabot Citrus (The Squeeze)", t: "real", p: 38, d: 3 },
     { n: "Cabot Citrus (Wedge)", t: "real", p: 33, d: 2 },
     { n: "Casa de Campo (Dog)", t: "real", p: 72, d: 4 },
     { n: "Chileno Bay", t: "real", p: 72, d: 3 },
@@ -95,9 +98,10 @@ const courses = [
     { n: "Crystal Pines", t: "fic", p: 72, d: 3 },
     { n: "Dalebrook Forest", t: "fic", p: 27, d: 1 },
     { n: "Devil's Island", t: "fic", p: 72, d: 4 },
-    { n: "Emirates GC", t: "real", p: 72, d: 4 },
+    { n: "Emirates GC (Majlis)", t: "real", p: 72, d: 4 },
+    { n: "Emirates GC (Faldo)", t: "real", p: 72, d: 4 },
     { n: "Evian Resort", t: "real", p: 71, d: 3 },
-    { n: "Fairmont Chateau Whistler", t: "real", p: 71, d: 4 },
+    { n: "Fairmont Chateau Whistler", t: "real", p: 72, d: 3 },
     { n: "Firestone CC", t: "real", p: 70, d: 5 },
     { n: "Glen Abbey", t: "real", p: 72, d: 3 },
     { n: "Glen Oaks", t: "real", p: 71, d: 4 },
@@ -119,6 +123,7 @@ const courses = [
     { n: "Mission Hills CC", t: "real", p: 72, d: 3 },
     { n: "Montecito Club", t: "real", p: 71, d: 3 },
     { n: "Muirfield Village", t: "real", p: 72, d: 5 },
+    { n: "Oakmont CC", t: "real", p: 71, d: 5 },
     { n: "Olympic Course (Rio)", t: "real", p: 71, d: 3 },
     { n: "Pebble Beach", t: "real", p: 72, d: 3 },
     { n: "PGA National", t: "real", p: 72, d: 5 },
@@ -197,7 +202,7 @@ function render(c) {
 }
 
 // Update counters on load
-document.getElementById('totalLib').innerText = `Sync complete. ${courses.length} VG3 Elite courses loaded.`;
+document.getElementById('totalLib').innerText = `Sync complete. ${courses.length} verified courses loaded.`;
 document.getElementById('courseCount').innerText = `${courses.length}-COURSES`;
 </script>
 
