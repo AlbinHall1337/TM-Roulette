@@ -27,7 +27,7 @@
 
 <div class="container">
     <h1>Trackman X BV-Svingen</h1>
-    <div class="subtitle">83-COURSEs</div>
+    <div class="subtitle" id="courseCount">LOADING COURSES...</div>
     
     <div class="filters">
         <div class="filter-group">
@@ -64,7 +64,7 @@
     </div>
 
     <button onclick="spin()">SPIN THE WHEEL</button>
-    <div class="stats" id="totalLib">Loading library...</div>
+    <div class="stats" id="totalLib">Syncing course library...</div>
 </div>
 
 <script>
@@ -97,6 +97,7 @@ const courses = [
     { n: "Devil's Island", t: "fic", p: 72, d: 4 },
     { n: "Emirates GC", t: "real", p: 72, d: 4 },
     { n: "Evian Resort", t: "real", p: 71, d: 3 },
+    { n: "Fairmont Chateau Whistler", t: "real", p: 71, d: 4 },
     { n: "Firestone CC", t: "real", p: 70, d: 5 },
     { n: "Glen Abbey", t: "real", p: 72, d: 3 },
     { n: "Glen Oaks", t: "real", p: 71, d: 4 },
@@ -195,10 +196,10 @@ function render(c) {
     document.getElementById('cStars').innerText = s;
 }
 
+// Update counters on load
 document.getElementById('totalLib').innerText = `Sync complete. ${courses.length} VG3 Elite courses loaded.`;
+document.getElementById('courseCount').innerText = `${courses.length}-COURSES`;
 </script>
 
 </body>
 </html>
-
-
